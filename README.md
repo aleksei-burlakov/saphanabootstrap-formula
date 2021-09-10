@@ -2,7 +2,7 @@
 
 # SAP HANA platform bootstrap Salt formula
 
-Salt formula to bootstrap and manage a multi SAP HANA platform environment.
+Salt formula to bootstrap and manage a multi SAP HANA platform environment  .
 
 ## Features
 

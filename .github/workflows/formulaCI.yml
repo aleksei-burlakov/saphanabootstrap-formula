@@ -11,6 +11,7 @@ jobs:
   validation:
     runs-on: ubuntu-18.04
     steps:
+    - run: echo "Hello, I'm running"
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -33,7 +34,7 @@ jobs:
       env:
         OBS_USER: ${{ secrets.OBS_USER }}
         OBS_PASS: ${{ secrets.OBS_PASS }}
-        OBS_PROJECT: ${{ secrets.OBS_PROJECT }}
+        OBS_PROJECT: home:aburlakov:simple-build # ${{ secrets.OBS_PROJECT }}
     steps:
     - uses: actions/checkout@v2 
       with:
@@ -47,9 +48,14 @@ jobs:
         cp /root/.config/osc/oscrc $HOME/.config/osc
     - name: deliver package
       run: |
+        echo "DEBUGINFO: BEFORE UPLOAD.SH: ls -la /tmp"
+        ls -la /tmp
         sed -i 's~%%VERSION%%~${{ github.sha }}~' _service && \
         sed -i 's~%%REPOSITORY%%~${{ github.repository }}~' _service && \
-        /scripts/upload.sh 
+        /scripts/upload.sh
+        echo "DEBUGINFO: AFTER UPLOAD.SH: ls -la /tmp"
+        ls -la /tmp
+        ls -la /tmp/osc_project        
 
   submit:
     needs: [validation, delivery]
@@ -76,3 +82,15 @@ jobs:
        sed -i 's~%%VERSION%%~${{ github.sha }}~' _service && \
        sed -i 's~%%REPOSITORY%%~${{ github.repository }}~' _service && \
        /scripts/submit.sh
+       echo "DEBUGINFO: ls -la /"
+       ls -la /
+       echo "DEBUGINFO: ls -la /scripts"
+       ls -la /scripts
+       echo "DEBUGINFO: ls -la /tmp"
+       ls -la /tmp
+       echo "DEBUGINFO: submit.sh"
+       cat /scripts/submit.sh
+       echo "DEBUGINFO: init_osc_creds.sh"
+       cat /scripts/init_osc_creds.sh
+       echo "DEBUGINFO: upload.sh"
+       cat /scripts/upload.sh
